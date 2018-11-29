@@ -154,19 +154,25 @@ while (count < len(data2)):
         #print(int(pre_trans_data[count][1]), pred[0])
 
         if xcorr > thresh:
-            if true_hits_2.get(current_scan) == peptide_number_2[int(pre_trans_data2[count][20])]:
+            #print ("Above Thresh")
+            #print (true_hits.get(current_scan))
+            if int(pre_trans_data2[count][1]) == 1:
                 static_true_pos += 1
-            else: 
+                if true_hits_2.get(current_scan) == peptide_number_2[int(pre_trans_data2[count][20])]:
+                    static_true_true += 1
+                else:
+                    static_false_true += 1
+            else:
                 static_false_pos += 1
         else:
-            if true_hits_2.get(current_scan) == peptide_number_2[int(pre_trans_data2[count][20])]:
+            if int(pre_trans_data2count][1]) == 1:
                 static_false_neg += 1
             else:
                 static_true_neg += 1
-
     count += 1
 
 print ("Static: True pos: %d, True neg: %d, False pos: %d, False neg: %d" % (static_true_pos, static_true_neg, static_false_pos, static_false_neg) )
+print ("Static: Final true pos: %d, Final false pos: %d" % (static_true_true, static_false_true) )
 
 count = 0
 
@@ -175,8 +181,8 @@ true_neg = 0
 false_pos = 0 
 false_neg = 0
 
-current_scan = int(pre_trans_data[count][0])
-last_scan = int(pre_trans_data[count][0])
+current_scan = int(pre_trans_data2[count][0])
+last_scan = int(pre_trans_data2[count][0])
 
 true_true_hits = 0
 false_true_hits = 0
@@ -299,8 +305,6 @@ true_pos = 0
 true_neg = 0
 false_pos = 0 
 false_neg = 0
-
-thresh = -3.0
 
 print("Thresh = %f" % thresh)
 count = 0

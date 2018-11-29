@@ -26,7 +26,7 @@ data = data [:, [i for i in range(2, 20)]]
 # Creat First N Scan Subset
 #
 count = 0
-N_scans = 30000
+N_scans = 50000
 for scan in scan_nums:
     if int(scan) > N_scans:
         break
@@ -89,7 +89,7 @@ for i in range(0, len(init_set)):
 
 pass_thresh = []
 
-false_discovery = .20
+false_discovery = .01
 
 while True:
     pass_thresh = []
@@ -166,7 +166,7 @@ for j in range (0, 9):
     current_scan = int(pre_trans_init[count][0])
     last_scan = 0
 
-    false_discovery = 0.1
+    false_discovery = 0.01
 
 
     #
@@ -243,6 +243,9 @@ static_true_neg = 0
 static_false_pos = 0 
 static_false_neg = 0
 
+static_true_true = 0
+static_false_true = 0
+
 count = end_train
 
 current_scan = int(pre_trans_data[count][0])
@@ -268,19 +271,23 @@ while (count < len(data)):
         if xcorr > thresh:
             #print ("Above Thresh")
             #print (true_hits.get(current_scan))
-            if true_hits.get(current_scan) == peptide_number[int(pre_trans_data[count][20])]:
+            if int(pre_trans_data[count][1]) == 1:
                 static_true_pos += 1
-            else: 
+                if true_hits.get(current_scan) == peptide_number[int(pre_trans_data[count][20])]:
+                    static_true_true += 1
+                else:
+                    static_false_true += 1
+            else:
                 static_false_pos += 1
         else:
-            if true_hits.get(current_scan) == peptide_number[int(pre_trans_data[count][20])]:
+            if int(pre_trans_data[count][1]) == 1:
                 static_false_neg += 1
             else:
                 static_true_neg += 1
-
     count += 1
 
 print ("Static: True pos: %d, True neg: %d, False pos: %d, False neg: %d" % (static_true_pos, static_true_neg, static_false_pos, static_false_neg) )
+print ("Static: Final true pos: %d, Final false pos: %d" % (static_true_true, static_false_true) )
 
 count = end_train
 
@@ -303,7 +310,7 @@ count = 0
 current_scan = int(pre_trans_init[count][0])
 last_scan = 0
 
-false_discovery = 0.1
+false_discovery = 0.01
 
 while (count < len(init_set)):
     current_scan = int(pre_trans_init[count][0])
