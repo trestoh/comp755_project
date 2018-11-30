@@ -54,7 +54,7 @@ for i in range(0, len(data)):
 
 pass_thresh = []
 
-false_discovery = .30
+false_discovery = .20
 
 while True:
     pass_thresh = []
@@ -104,9 +104,66 @@ print ("1 Iteration Done")
 for j in range (0, 9):
     #previously I was not wiping the training set between iterations
     training_set = []
+
+    thresh = 0.0
+
+    predictions = []
+    pass_thresh = []
+
+    count = 0
+    current_scan = int(data[count][0])
+    last_scan = 0
+
+    false_discovery = 0.2
+
+
+    #
+    # Consider everything, not just top
+    #
+    while (count < len(data)):
+        current_scan = int(pre_trans_data[count][0])
+        #uncomment and tab for less consideration
+        if current_scan != last_scan:
+            last_scan = current_scan
+            pred = sgd_clf.decision_function(data[count, :].reshape(1,-1))
+            #print (pred[0])
+            #print(int(pre_trans_data[count][1]), pred[0])
+            predictions.append((int(pre_trans_data[count][1]), pred[0]))
+
+        count += 1
+
+    for (label, prediction) in predictions:
+        if prediction > thresh:
+            pass_thresh.append(label)
+    true_pos = sum(label == 1 for label in pass_thresh)
+    false_pos = sum(label == -1 for label in pass_thresh)
+
+    if 2 * false_pos / (true_pos + false_pos) >= false_discovery:
+        increase = True
+    else:
+        increase = False
+
+    while True:
+        pass_thresh = []
+        for (label, prediction) in predictions:
+            if prediction > thresh:
+                pass_thresh.append(label)
+        true_pos = sum(label == 1 for label in pass_thresh)
+        false_pos = sum(label == -1 for label in pass_thresh)
+        if increase:
+            if 2 * false_pos / (true_pos + false_pos) <= false_discovery:
+                break
+            thresh += .01
+        else:
+            if 2 * false_pos / (true_pos + false_pos) >= false_discovery:
+                break
+            thresh -= .01
+    
+    print("Thresh = %f" % thresh)
+
     for i in range(0, len(data)):
-        pred = sgd_clf.predict(data[i, :].reshape(1,-1))
-        if pred[0] == 1  and orig_labels[i] == 1:
+        pred = sgd_clf.decision_function(data[i, :].reshape(1,-1))
+        if pred > thresh  and orig_labels[i] == 1:
             labels[i] = 1
             training_set.append(i)
         else:
@@ -133,6 +190,9 @@ static_true_pos = 0
 static_true_neg = 0
 static_false_pos = 0 
 static_false_neg = 0
+
+static_true_true = 0
+static_false_true = 0
 
 count = 0
 
@@ -165,7 +225,7 @@ while (count < len(data2)):
             else:
                 static_false_pos += 1
         else:
-            if int(pre_trans_data2count][1]) == 1:
+            if int(pre_trans_data2[count][1]) == 1:
                 static_false_neg += 1
             else:
                 static_true_neg += 1

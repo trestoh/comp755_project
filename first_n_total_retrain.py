@@ -242,6 +242,9 @@ static_true_neg = 0
 static_false_pos = 0 
 static_false_neg = 0
 
+static_true_true = 0
+static_false_true = 0
+
 count = end_train
 
 current_scan = int(pre_trans_data[count][0])
