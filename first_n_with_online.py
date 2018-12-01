@@ -26,7 +26,7 @@ data = data [:, [i for i in range(2, 20)]]
 # Creat First N Scan Subset
 #
 count = 0
-N_scans = 30000
+N_scans = 50000
 for scan in scan_nums:
     if int(scan) > N_scans:
         break
@@ -89,7 +89,7 @@ for i in range(0, len(init_set)):
 
 pass_thresh = []
 
-false_discovery = .20
+false_discovery = .30
 
 while True:
     pass_thresh = []
@@ -300,7 +300,59 @@ true_true_hits = 0
 false_true_hits = 0
 expected_true_hits = 0
 
-thresh = -3.0
+count = 0
+current_scan = int(pre_trans_init[count][0])
+last_scan = 0
+
+false_discovery = 0.1
+
+while (count < len(init_set)):
+    current_scan = int(pre_trans_init[count][0])
+    if current_scan != last_scan:
+        last_scan = current_scan
+        pred = sgd_clf.decision_function(init_set[count, :].reshape(1,-1))
+        #print (pred[0])
+        #print(int(pre_trans_data[count][1]), pred[0])
+        predictions.append((int(pre_trans_init[count][1]), pred[0]))
+
+    count += 1
+
+for (label, prediction) in predictions:
+    if prediction > thresh:
+        pass_thresh.append(label)
+true_pos = sum(label == 1 for label in pass_thresh)
+false_pos = sum(label == -1 for label in pass_thresh)
+
+if 2 * false_pos / (true_pos + false_pos) >= false_discovery:
+    increase = True
+else:
+    increase = False
+
+#print (2 * false_pos / (true_pos + false_pos))
+
+while True:
+    pass_thresh = []
+    for (label, prediction) in predictions:
+        if prediction > thresh:
+            pass_thresh.append(label)
+    true_pos = sum(label == 1 for label in pass_thresh)
+    false_pos = sum(label == -1 for label in pass_thresh)
+    if increase:
+        #print (2 * false_pos / (true_pos + false_pos))
+        if 2 * false_pos / (true_pos + false_pos) <= false_discovery:
+            break
+        thresh += .01
+    else:
+        #print (2 * false_pos / (true_pos + false_pos))
+        if 2 * false_pos / (true_pos + false_pos) >= false_discovery:
+            break
+        thresh -= .01
+    #print (2 * false_pos / (true_pos + false_pos))
+    #print (thresh)
+
+
+
+#thresh = -1.63
 
 count = 0
 current_scan = int(pre_trans_init[count][0])

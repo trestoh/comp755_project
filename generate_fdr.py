@@ -28,7 +28,7 @@ pos_found = true_pos
 false_discovery = (2 * false_pos / (pos_found + false_pos)) * 100.0
 true_discovery = (pos_found/true_pos) * 100.0
 
-with open("roc_test_4.txt", "a") as myfile:
+with open("roc_test_5.txt", "a") as myfile:
     for i in range(0, len(data)):
         if int(data[i,0]) == -1:
             false_pos -= 1

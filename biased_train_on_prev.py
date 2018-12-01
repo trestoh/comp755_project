@@ -54,7 +54,7 @@ for i in range(0, len(data)):
 
 pass_thresh = []
 
-false_discovery = .20
+false_discovery = .1
 
 while True:
     pass_thresh = []
@@ -114,7 +114,7 @@ for j in range (0, 9):
     current_scan = int(data[count][0])
     last_scan = 0
 
-    false_discovery = 0.2
+    false_discovery = 0.1
 
 
     #

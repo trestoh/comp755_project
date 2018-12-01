@@ -26,7 +26,7 @@ data = data [:, [i for i in range(2, 20)]]
 # Creat First N Scan Subset
 #
 count = 0
-N_scans = 30000
+N_scans = 50000
 for scan in scan_nums:
     if int(scan) > N_scans:
         break
@@ -89,7 +89,7 @@ for i in range(0, len(init_set)):
 
 pass_thresh = []
 
-false_discovery = .20
+false_discovery = .30
 
 while True:
     pass_thresh = []

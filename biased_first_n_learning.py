@@ -89,7 +89,7 @@ for i in range(0, len(init_set)):
 
 pass_thresh = []
 
-false_discovery = .01
+false_discovery = .3
 
 while True:
     pass_thresh = []
@@ -166,7 +166,7 @@ for j in range (0, 9):
     current_scan = int(pre_trans_init[count][0])
     last_scan = 0
 
-    false_discovery = 0.01
+    false_discovery = 0.1
 
 
     #
@@ -310,7 +310,7 @@ count = 0
 current_scan = int(pre_trans_init[count][0])
 last_scan = 0
 
-false_discovery = 0.01
+false_discovery = 0.1
 
 while (count < len(init_set)):
     current_scan = int(pre_trans_init[count][0])
@@ -366,7 +366,7 @@ false_neg = 0
 print("Thresh = %f" % thresh)
 count = end_train
 
-fdr_file = open("restart_first_30k_20fdr.txt", "a")
+fdr_file = open("first_50k_30_10_fdr.txt", "a")
 
 while (count < len(data)):
     current_scan = int(pre_trans_data[count][0])
